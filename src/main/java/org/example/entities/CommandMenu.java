@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CommandMenu {
+    private static StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
+    private static SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
+
     public static void printOperations(){
         System.out.println("Please enter the number of the operation you want to perform");
         System.out.println("1-Add Group");
@@ -63,9 +66,7 @@ public class CommandMenu {
     }
     private static void addGroupToDb(String name){
         MyGroup group=new MyGroup(name);
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        try(Session s=sessionFactory.openSession()){
+       try(Session s=sessionFactory.openSession()){
             Transaction transaction=s.beginTransaction();
             s.persist(group);
             transaction.commit();
@@ -79,9 +80,7 @@ public class CommandMenu {
     }
     private static void addMemberToDb(String name){
         MyMember member=new MyMember(name);
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        try(Session s=sessionFactory.openSession()){
+       try(Session s=sessionFactory.openSession()){
             Transaction transaction=s.beginTransaction();
             s.persist(member);
             transaction.commit();
@@ -99,8 +98,6 @@ public class CommandMenu {
         }
     }
     private static boolean addMemberToGroup(int memberId,int groupId){
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
         try(Session s=sessionFactory.openSession()){
             Transaction transaction=s.beginTransaction();
             MyMember member=s.load(MyMember.class,memberId);
@@ -133,9 +130,7 @@ public class CommandMenu {
     private static boolean addMessageToDb(String content,int authorId,int groupId){
         Message m = new Message(content);
 
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
-        try(Session s=sessionFactory.openSession()){
+      try(Session s=sessionFactory.openSession()){
             Transaction transaction=s.beginTransaction();
             MyMember author=s.load(MyMember.class,authorId);
             MyGroup group=s.load(MyGroup.class,groupId);
@@ -152,8 +147,6 @@ public class CommandMenu {
         return true;
     }
     private static void showAllGroups(){
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
         List<MyGroup> groups;
         try(Session s=sessionFactory.openSession()){
            groups= s.createQuery("from MyGroup", MyGroup.class).list();
@@ -161,8 +154,6 @@ public class CommandMenu {
         System.out.println(groups);
     }
     private static void showAllMembers(){
-        StandardServiceRegistry registry=new StandardServiceRegistryBuilder().configure().build();
-        SessionFactory sessionFactory=new MetadataSources(registry).buildMetadata().buildSessionFactory();
         List<MyMember> members;
         try(Session s=sessionFactory.openSession()){
             members= s.createQuery("from MyMember", MyMember.class).list();

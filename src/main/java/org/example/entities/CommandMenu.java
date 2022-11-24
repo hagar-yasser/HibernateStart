@@ -21,7 +21,6 @@ public class CommandMenu {
         System.out.println("5-Show All Members");
         System.out.println("6-Add member to group");
         System.out.println("0-EXIT");
-        callEnteredMethod();
     }
     public static void callEnteredMethod(){
         Scanner sc = new Scanner(System.in);
